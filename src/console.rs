@@ -101,6 +101,11 @@ impl InputBuffer {
         if handle == w::INVALID_HANDLE_VALUE { last_error() }
         else { unsafe { Ok(InputBuffer::from_raw_handle(handle)) } }
     }
+    pub fn set_console_mode(&self, flags: u32) -> Result<()> {
+        let res = unsafe { k32::SetConsoleMode(*self.0, flags) };
+        if res == 0 { return last_error() }
+        Ok(())
+    }
     /// The number of input that is available to read
     pub fn available_input(&self) -> Result<u32> {
         let mut num = 0;
